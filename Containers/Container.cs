@@ -4,25 +4,21 @@ namespace Containers;
 public abstract class Container
 {
     private double _mass; // kg
-    private readonly double _height; // cm
-    private readonly double _netWeight; // kg
-    private readonly double _depth; // cm
+    private double _height; // cm
+    private double _netWeight; // kg
+    private double _depth; // cm
     private double _maxLoadCapacity; // kg
     private string _serialNumber;
     
-    protected Container(double mass, double height, double netWeight, double depth, double maxLoadCapacity)
+    public Container(double mass, double height, double netWeight, double depth, double maxLoadCapacity)
     {
-        Mass = mass;
+        _mass = mass;
         _height = height;
         _netWeight = netWeight;
         _depth = depth;
-        MaxLoadCapacity = maxLoadCapacity;
-        SerialNumber = GenerateSerialNumber();
+        _maxLoadCapacity = maxLoadCapacity;
     }
 
-    
-    
-    
     
     // Getters and setters
     
@@ -41,16 +37,38 @@ public abstract class Container
     public double Height
     {
         get => _height;
+        set
+        {
+            if (value <= 0)
+                throw new ArgumentOutOfRangeException(nameof(Height), "Wysokość musi być dodatnia");
+            
+            _height = value;
+        }
+        
     }
 
     public double NetWeight
     {
         get => _netWeight;
+        set
+        {
+            if (value <= 0)
+                throw new ArgumentOutOfRangeException(nameof(NetWeight), "Masa własna musi być dodatnia");
+            
+            _netWeight = value;
+        }
     }
 
     public double Depth
     {
         get => _depth;
+        set
+        {
+            if (value <= 0)
+                throw new ArgumentOutOfRangeException(nameof(NetWeight), "Głębokość musi być dodatnia");
+
+            _depth = value;
+        }
     }
 
     public double MaxLoadCapacity
@@ -65,19 +83,16 @@ public abstract class Container
             _maxLoadCapacity = value;
         }
     }
-    
-    public string SerialNumber { get => _serialNumber; set => _serialNumber = value; }
 
-    
-    
-    
-    
     // Methods
     
     public void UnloadCargo(double massToUnload)
     {
-        ValidateSpecificUnloadingConditions(massToUnload);
-        
+        if (!IsUnloadingCargoOperationValid(massToUnload))
+        {
+            throw new InvalidOperationException("Operacja niepoprawna");
+        }
+
         if (massToUnload > Mass)
             Mass = 0;
         else 
@@ -86,24 +101,20 @@ public abstract class Container
 
     public void LoadCargo(double massToLoad)
     {
-        
         if (Mass + massToLoad > MaxLoadCapacity)
             throw new OverfillException("Zbyt duży ładunek!");
 
-        ValidateSpecificLoadingConditions(massToLoad);
+        if (!IsLoadingCargoOperationValid(massToLoad))
+            throw new InvalidOperationException("Operacja niepoprawna");
         
         Mass += massToLoad;
     }
 
-    
-    
-    
-    
     // Abstract methods
     
     protected abstract string GenerateSerialNumber();
 
-    protected abstract void ValidateSpecificLoadingConditions(double massToLoad);
+    protected abstract bool IsLoadingCargoOperationValid(double massToLoad);
     
-    protected abstract void ValidateSpecificUnloadingConditions(double massToUnLoad);
+    protected abstract bool IsUnloadingCargoOperationValid(double massToUnLoad);
 }
