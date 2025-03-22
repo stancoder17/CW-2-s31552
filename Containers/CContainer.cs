@@ -1,6 +1,6 @@
 ﻿namespace Containers;
 
-public class CContainer : Container
+public class CContainer : Container<CooledCargo>
 {
     private static int _id = 1;
 

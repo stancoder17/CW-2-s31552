@@ -1,6 +1,6 @@
 ﻿namespace Containers;
 
-public class GContainer : Container
+public class GContainer : Container<GasCargo>
 {
     private static int _id = 1;
 

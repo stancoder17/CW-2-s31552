@@ -1,13 +1,12 @@
 ﻿namespace Containers;
 
-public class LContainer : Container
+public class LContainer : Container<LiquidCargo>
 {
     private static int _id = 1;
-
+    
     public LContainer(double mass, double height, double netWeight, double depth, double maxLoadCapacity)
-        : base(mass, height, netWeight, depth, maxLoadCapacity)
-    {
-    }
+        : base(mass, height, netWeight, depth, maxLoadCapacity) { }
+    
     
     protected override string GenerateSerialNumber()
     {

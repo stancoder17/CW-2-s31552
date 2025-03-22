@@ -6,6 +6,9 @@ public abstract class Cargo
 
     protected Cargo(string name)
     {
+        if (name == null)
+            throw new ArgumentNullException(nameof(name));
+        
         Name = name;
     }
 }
